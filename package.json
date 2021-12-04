@@ -1,0 +1,20 @@
+{
+  "name": "duration-formatter",
+  "version": "1.0.5",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cloudtion/duration-formatter.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cloudtion/duration-formatter/issues"
+  },
+  "homepage": "https://github.com/cloudtion/duration-formatter#readme"
+}
