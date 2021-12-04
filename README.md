@@ -37,8 +37,20 @@ Basic usage is illustrated with just to functions, `timeFromSeconds` and `second
 
 **options**: Object containing any combination of the following options:
 
- - **hours_padding:** Integer
- - **minutes_padding:** Integer
- - **seconds_padding:** Integer
- - **seconds_decimal_places:** Integer
- - **decimal_symbol:** String (default 
+ - **hours_padding:** Integer (defaults to **2**)
+ - **minutes_padding:** Integer (defaults to **2**)
+ - **seconds_padding:** Integer (defaults to **2**)
+ - **seconds_decimal_places:** Integer (defaults to **0**)
+ - **decimal_symbol:** String (defaults to "**,**")
+- **output_template:** Function that takes parameters determines the formatting of the parsed seconds.
+
+	Defaults to ``(hours, minutes, seconds)=>  `${  hours  }:${  minutes  }:${  seconds  }` ``
+
+---
+### secondsFromTime(time_string, options = {})
+	
+**time_string**: String in the format returned by the default output template of `timeFromSeconds `
+
+**options**: Object containing any combination of the following options:
+
+ - **decimal_symbol:** String (defaults to "**,**")
