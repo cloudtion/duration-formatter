@@ -1,6 +1,6 @@
 # Duration Formatter
 
-Simple duration formatter to turn seconds into strings representing lengths of time.
+Simple duration formatting to turn seconds into strings representing lengths of time.
 
 **i.e.**
 	
@@ -13,7 +13,7 @@ Simple duration formatter to turn seconds into strings representing lengths of t
 
 ## Basic Usage
 
-Basic usage is illustrated with just to functions, `timeFromSeconds` and `secondsFromTime`:
+Basic usage is illustrated with just two functions, `timeFromSeconds` and `secondsFromTime`:
 
     import {timeFromSeconds, secondsFromTime} from 'duration-formatter';
 	
