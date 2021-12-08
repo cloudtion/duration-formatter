@@ -22,10 +22,13 @@ function timeFromSeconds(input_seconds, options = {}){
 
     const decimal_mult = ( options_sum.seconds_decimal_places===0? 1 : 10**options_sum.seconds_decimal_places );
 
+    
+    input_seconds = ( Math.round(input_seconds * decimal_mult ) / decimal_mult );
+    
     const calculated = {
         hours: '' + Math.floor(input_seconds / 3600),
         minutes: '' + Math.floor( (input_seconds %= 3600) / 60),
-        seconds: '' + ( Math.round( (input_seconds %= 60) * decimal_mult ) / decimal_mult )
+        seconds: '' + ( Math.round( (input_seconds % 60) * decimal_mult ) / decimal_mult )
     }
 
     const dc_split = calculated.seconds.split(options_sum.decimal_symbol);
@@ -57,26 +60,65 @@ function secondsFromTime(input_time, options = {}){
 
     const options_sum = {
         decimal_symbol: '.',
+        template_string: '{H}:{M}:{S}',
         ...options
     }
 
-    const regex = new RegExp(`^(?:-[ ]?)?([0-9]+):([0-9]+):([0-9]+([\\${options_sum.decimal_symbol}][0-9+]*)?)$`);
+    const template = options.template_string;
 
-    const match = (input_time+'').match(regex);
+    let positions = {
+        h: template.indexOf('{H}'),
+        m: template.indexOf('{M}'),
+        s: template.indexOf('{S}'),
+    }
+
+    
+    const to_order = [];
+
+    if( positions.h > -1 ){
+
+        to_order.push('h');
+    }
+    
+    if( positions.m > -1 ){
+
+        to_order.push('m');
+    }
+    
+    if( positions.s > -1 ){
+
+        to_order.push('s');
+    }
+
+    const order = to_order.sort((a,b)=> positions[a] - positions[b] );
+
+    const hours_minutes_match = '([0-9]+)';
+    const seconds_match = `([0-9]+([\\${options_sum.decimal_symbol}][0-9+]*)?)`;
+
+    const built_regex = options_sum.template_string
+                                   .replace('{H}', hours_minutes_match)
+                                   .replace('{M}', hours_minutes_match)
+                                   .replace('{S}', seconds_match);
+                                  
+    const regex_with_negative = `^(?:-[ ]?)?${built_regex}$`;
+
+    const match = (input_time+'').match(new RegExp(regex_with_negative));
 
     if( match ){
 
-        const [, hours, minutes, seconds] = match;
+        const hours = order.indexOf('h')>-1? parseInt(match[order.indexOf('h')+1]) : 0;
+        const minutes = order.indexOf('m')>-1? parseInt(match[order.indexOf('m')+1]) : 0;
+        const seconds = order.indexOf('s')>-1? parseInt(match[order.indexOf('s')+1]) : 0;
 
-        return ( ( parseInt(hours)*3600 ) + ( parseInt(minutes)*60 ) + parseFloat(seconds) ) * (input_time.trim().startsWith('-')? -1 : 1);
+
+        return ( ( hours*3600 ) + ( minutes*60 ) + seconds ) * (input_time.trim().startsWith('-')? -1 : 1);
  
     }else{
 
-        console.error('Input time doesn\'t match requried pattern.');
+        throw new Error('Input time doesn\'t match required pattern.');
     }
 }
 
-	
 
 module.exports = {
     timeFromSeconds,
